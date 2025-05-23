@@ -1,0 +1,14 @@
+RM := rm -rf
+BRIDGE_EXE := studio-mdk-bridge.exe
+UV4_EXE := "C:\Keil_v5\astyle-3.6.8-x64\astyle.exe"
+UVPROJX_LOC := "C:\Users\85953\Desktop\CookGPT\CookGPT\project.uvprojx"
+
+.PHONY: mdk_all
+
+mdk_all:
+	-$(BRIDGE_EXE) --build --uv4-path $(UV4_EXE) $(UVPROJX_LOC)
+
+mdk_clean:
+	-@$(RM) *
+	@echo 'success'
+

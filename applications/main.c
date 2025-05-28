@@ -57,7 +57,8 @@ int rtc_init()
         return RT_ERROR;
     }
 
-    /*设置时间，不准的时候调
+    //设置时间，不准的时候调
+    //以后联网了这里改成实时获取
     ret = set_date(2025, 5, 28);
         if (ret != RT_EOK)
         {

@@ -8,6 +8,9 @@
 
 static rt_thread_t tid1 = RT_NULL;
 
+extern float temperature;
+extern float humidity;    // 温湿度全局变量
+
 static void screen_entry(void *parameter)
 {
 
@@ -20,10 +23,10 @@ static void screen_entry(void *parameter)
 
         lcd_set_color(WHITE, BLACK);
         //传感器数据(以后改成真实数据)
-        sprintf(show_str,"temp:%d C",32);
+        sprintf(show_str,"temp:%.2f C",temperature);
         lcd_show_string(10, 10+40   , 24, show_str);
 
-        sprintf(show_str,"wet:%d %%",98);
+        sprintf(show_str,"wet:%.2f %%",humidity);
         lcd_show_string(10, 10+40+24, 24, show_str);
 
         //rtc时钟
@@ -51,6 +54,7 @@ int thread_screen(void)
         rt_thread_startup(tid1);
     return 0;
 }
+
 INIT_APP_EXPORT(thread_screen);
 
 

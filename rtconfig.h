@@ -86,6 +86,8 @@
 #define RT_USING_PIN
 #define RT_USING_PWM
 #define RT_USING_RTC
+#define RT_USING_SENSOR
+#define RT_USING_SENSOR_CMD
 
 /* Using USB */
 
@@ -234,6 +236,8 @@
 
 /* sensors drivers */
 
+#define PKG_USING_AHT10
+#define PKG_USING_AHT10_V210
 /* end of sensors drivers */
 
 /* touch drivers */
@@ -324,6 +328,7 @@
 #define BSP_USING_ONBOARD_LCD
 #define BSP_USING_ONBOARD_LCD_PWM_BL
 #define BSP_USING_ONBOARD_LCD_TEST
+#define BSP_USING_AHT21
 /* end of Onboard Peripheral Drivers */
 
 /* On-chip Peripheral Drivers */
@@ -338,6 +343,13 @@
 #define BSP_USING_PWM1_CH4
 #define BSP_USING_PWM14
 #define BSP_USING_PWM14_CH1
+#define BSP_USING_I2C
+#define BSP_USING_I2C1
+#define BSP_I2C1_SCL_PIN 64
+#define BSP_I2C1_SDA_PIN 65
+#define BSP_USING_I2C3
+#define BSP_I2C3_SCL_PIN 64
+#define BSP_I2C3_SDA_PIN 65
 #define BSP_USING_EXT_FMC_IO
 #define BSP_USING_FMC
 /* end of On-chip Peripheral Drivers */

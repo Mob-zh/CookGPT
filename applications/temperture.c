@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <aht10.h>
+#include <temperture.h>
 
 #define THREAD_PRIORITY         20      // 线程优先级
 #define THREAD_STACK_SIZE       1024     // 线程堆栈大小
@@ -11,7 +12,7 @@ float temperature;
 float humidity;    // 温湿度全局变量
 
 
-static rt_thread_t tid2 = RT_NULL;
+static rt_thread_t tid_temp = RT_NULL;
 
 
 static void get_temp(void *parameter)
@@ -20,7 +21,6 @@ static void get_temp(void *parameter)
 
     aht10_device_t dev;
     const char *i2c_bus_name = "i2c3";
-    int count = 0;
     /* 等 待 传 感 器 正 常 工 作 */
     rt_thread_mdelay(2000);
     /* 初 始 化 aht10 */
@@ -30,7 +30,7 @@ static void get_temp(void *parameter)
         rt_kprintf("The sensor initializes failure");
         return ;
     }
-    while (count++ < 100)
+    while (1)
     {
     /* 读 取 湿 度 */
     humidity = aht10_read_humidity(dev);
@@ -45,14 +45,14 @@ static void get_temp(void *parameter)
 int thread_gettemp(void)
 {
 
-    tid2 = rt_thread_create("temp",
+    tid_temp = rt_thread_create("temp",
                             get_temp, RT_NULL,
                             THREAD_STACK_SIZE,
                             THREAD_PRIORITY, THREAD_TIMESLICE);
 
     /* 如果获得线程控制块，启动这个线程 */
-    if (tid2 != RT_NULL)
-        rt_thread_startup(tid2);
+    if (tid_temp != RT_NULL)
+        rt_thread_startup(tid_temp);
     return 0;
 }
 INIT_APP_EXPORT(thread_gettemp);

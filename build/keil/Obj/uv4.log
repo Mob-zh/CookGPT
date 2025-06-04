@@ -1,0 +1,5 @@
+Load "C:\\Users\\85953\\Desktop\\CookGPT\\CookGPT\\build\\keil\\Obj\\rt-thread.axf" 
+_____^
+*** error 56: cannot open file
+Error: Flash Download failed  -  Could not load file 'C:\Users\85953\Desktop\CookGPT\CookGPT\build\keil\Obj\rt-thread.axf'
+Flash Load finished at 18:15:06

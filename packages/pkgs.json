@@ -1,5 +1,10 @@
 [
  {
+  "path": "/packages/iot/pahomqtt", 
+  "ver": "latest", 
+  "name": "PAHOMQTT"
+ }, 
+ {
   "path": "/packages/iot/webclient", 
   "ver": "v2.2.0", 
   "name": "WEBCLIENT"

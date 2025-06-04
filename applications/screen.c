@@ -40,9 +40,8 @@ static void screen_entry(void *parameter)
         lcd_show_string(10, 200, 24, "Wifi:");
         lcd_show_string(72, 200, 24, (const char *)info.ssid.val);
 
+
     }
-
-
 }
 
 /* 线程示例 */

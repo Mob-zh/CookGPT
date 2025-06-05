@@ -83,6 +83,7 @@ void wlan_station_disconnect_handler(int event, struct rt_wlan_buff *buff, void 
 // 连接成功的回调函数（触发自动重连时使用）
 static void wlan_connect_handler(int event, struct rt_wlan_buff *buff, void *parameter)
 {
+
     rt_kprintf("%s\n", __FUNCTION__);
     if ((buff != RT_NULL) && (buff->len == sizeof(struct rt_wlan_info)))
     {
@@ -136,7 +137,7 @@ static void Wifi_Init(void *parameter)
     static int i = 0;
     int result = RT_EOK;
 
-    wifi_autoconnect();
+//    wifi_autoconnect();
 
     // 等待WiFi初始化完成
     rt_thread_mdelay(500); // 延时500ms，等待 RW007 模块初始化完成
@@ -229,6 +230,7 @@ static void print_wlan_information(struct rt_wlan_info *info,int index)
 
     rt_kprintf("%-14.14s %-4d %3d %4d\n", security, info->rssi, info->channel, info->datarate / 1000000);
 }
+MSH_CMD_EXPORT(print_wlan_information,print_wlan_information);
 
 // 配置并启动自动连接机制
 static int wifi_autoconnect(void)

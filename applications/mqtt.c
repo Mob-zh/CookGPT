@@ -125,6 +125,7 @@ static void mqtt_sub_default_callback(MQTTClient *c, MessageData *msg_data)
 
 static void mqtt_connect_callback(MQTTClient *c)
 {
+
     LOG_I("Start to connect mqtt server");
 }
 

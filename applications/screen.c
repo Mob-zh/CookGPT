@@ -37,7 +37,10 @@ static void screen_entry(void *parameter)
         lcd_show_string(10, 10+40+24+24, 16, show_str);
 
         // wifiID
+        rt_wlan_get_info(&info); // 获取当前连接的热点信息
+
         lcd_show_string(10, 200, 24, "Wifi:");
+        //rt_kprintf("%s\n",(const char *)info.ssid.val);
         lcd_show_string(72, 200, 24, (const char *)info.ssid.val);
 
 

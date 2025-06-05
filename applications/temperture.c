@@ -37,8 +37,16 @@ static void get_temp(void *parameter)
     humidity = aht10_read_humidity(dev);
     /* 读 取 温 度 */
     temperature = aht10_read_temperature(dev);
-    sprintf(send_buff, "Humi: %.2f%%, Temp: %.2f C", humidity, temperature);
-    mq_publish(send_buff);
+
+    sprintf(send_buff, "%.2f", temperature);
+    mq_temp_publish(send_buff);
+
+    sprintf(send_buff, "%.2f", humidity);
+    mq_wet_publish(send_buff);
+
+    sprintf(send_buff, "%d", 0);
+    mq_fire_publish(send_buff);
+
     rt_thread_mdelay(2000);
     }
         return ;

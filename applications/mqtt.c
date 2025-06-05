@@ -37,14 +37,20 @@
  * ssl://[fe80::20c:29ff:fe9a:a07e]:1884
  */
 #define MQTT_URI "tcp://broker.emqx.io:1883"
-#define MQTT_SUBTOPIC "/CookGPT/sub/"
-#define MQTT_PUBTOPIC "/CookGPT/pub/"
+
+#define MQTT_SUB_LED_TOPIC "/CookGPT/sub/led"
+
+#define MQTT_PUB_TEMP_TOPIC "/CookGPT/pub/temp"
+#define MQTT_PUB_WET_TOPIC "/CookGPT/pub/wet"
+#define MQTT_PUB_FIRE_TOPIC "/CookGPT/pub/fire"
 
 /* define MQTT client context */
 static MQTTClient client;
 
-char sup_pub_topic[48] = {0};
-char pub_topic[48] = {0};
+char sub_led_topic[48] = {0};
+char pub_temp_topic[48] = {0};
+char pub_wet_topic[48] = {0};
+char pub_fire_topic[48] = {0};
 
 /* Thread */
 #define THREAD_PRIORITY         25
@@ -132,8 +138,8 @@ static void mqtt_connect_callback(MQTTClient *c)
 static void mqtt_online_callback(MQTTClient *c)
 {
     LOG_D("Connect mqtt server success");
-    LOG_D("Publish message: Hello,RT-Thread! to topic: %s", pub_topic);
-    mq_publish("Hello,RT-Thread!");
+    LOG_D("Publish message: Hello,RT-Thread! to topic: %s", pub_temp_topic);
+    mq_temp_publish("Hello,RT-Thread!");
 }
 
 static void mqtt_offline_callback(MQTTClient *c)
@@ -159,8 +165,11 @@ void mq_start(void)
         client.uri = MQTT_URI;
 
         /* 生成随机客户端 ID */
-        rt_snprintf(sup_pub_topic, sizeof(sup_pub_topic), "%s", MQTT_SUBTOPIC);
-        rt_snprintf(pub_topic, sizeof(pub_topic), "%s", MQTT_PUBTOPIC);
+        rt_snprintf(sub_led_topic, sizeof(sub_led_topic), "%s", MQTT_SUB_LED_TOPIC);
+        rt_snprintf(pub_temp_topic, sizeof(pub_temp_topic), "%s", MQTT_PUB_TEMP_TOPIC);
+        rt_snprintf(pub_wet_topic, sizeof(pub_temp_topic), "%s", MQTT_PUB_WET_TOPIC);
+        rt_snprintf(pub_fire_topic, sizeof(pub_temp_topic), "%s", MQTT_PUB_FIRE_TOPIC);
+
         /* 配置连接参数 */
         memcpy(&client.condata, &condata, sizeof(condata));
         client.condata.clientID.cstring = cid;
@@ -173,7 +182,7 @@ void mq_start(void)
         client.condata.willFlag = 0;
         client.condata.will.qos = 1;
         client.condata.will.retained = 0;
-        client.condata.will.topicName.cstring = sup_pub_topic;
+        client.condata.will.topicName.cstring = sub_led_topic;
 
         client.buf_size = client.readbuf_size = 1024;
         client.buf = malloc(client.buf_size);
@@ -189,7 +198,7 @@ void mq_start(void)
         client.online_callback = mqtt_online_callback;
         client.offline_callback = mqtt_offline_callback;
         /* 设置要订阅的 topic 和 topic 对应的回调函数 */
-        client.messageHandlers[0].topicFilter = sup_pub_topic;
+        client.messageHandlers[0].topicFilter = sub_led_topic;
         client.messageHandlers[0].callback = mqtt_sub_callback;
         client.messageHandlers[0].qos = QOS1;
 
@@ -198,7 +207,7 @@ void mq_start(void)
     }
 
     /* 启动 MQTT 客户端 */
-    LOG_D("Start mqtt client and subscribe topic:%s", sup_pub_topic);
+    LOG_D("Start mqtt client and subscribe topic:%s", sub_led_topic);
     paho_mqtt_start(&client);
     is_started = 1;
 
@@ -207,11 +216,11 @@ _exit:
 }
 
 /* MQTT 消息发布函数 */
-void mq_publish(const char *send_str)
+void mq_temp_publish(const char *send_str)
 {
     MQTTMessage message;
     const char *msg_str = send_str;
-    const char *topic = pub_topic;
+    const char *topic = pub_temp_topic;
     message.qos = QOS1;
     message.retained = 0;
     message.payload = (void *)msg_str;
@@ -222,19 +231,33 @@ void mq_publish(const char *send_str)
     return;
 }
 
-
-static void msh_mq_publish(int argc, char *argv[])
+void mq_wet_publish(const char *send_str)
 {
-    char send_buff[100] = {'\0'};
-    for(int i=1;i<argc;i++)
-    {
-        if(i > 1)
-        {
-            strcat(send_buff," ");
-        }
-        strcat(send_buff,argv[i]);
-    }
-    mq_publish(send_buff);  //发布消息给主题"test"
+    MQTTMessage message;
+    const char *msg_str = send_str;
+    const char *topic = pub_wet_topic;
+    message.qos = QOS1;
+    message.retained = 0;
+    message.payload = (void *)msg_str;
+    message.payloadlen = strlen(message.payload);
+
+    MQTTPublish(&client, topic, &message);
+
+    return;
 }
-/* 导出到 msh 命令列表中 */
-MSH_CMD_EXPORT(msh_mq_publish, publish messege by msh);
+
+void mq_fire_publish(const char *send_str)
+{
+    MQTTMessage message;
+    const char *msg_str = send_str;
+    const char *topic = pub_fire_topic;
+    message.qos = QOS1;
+    message.retained = 0;
+    message.payload = (void *)msg_str;
+    message.payloadlen = strlen(message.payload);
+
+    MQTTPublish(&client, topic, &message);
+
+    return;
+}
+

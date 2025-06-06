@@ -17,13 +17,14 @@
 #include <drv_lcd.h>
 #include <rtdbg.h>
 #include <board.h>
+#include "mqtt.h"
 
 #define DBG_TAG "main"
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
-#define WLAN_SSID "666"             // 要连接的 WiFi 热点名称
-#define WLAN_PASSWORD "12345678"   // WiFi 密码
+#define WLAN_SSID "Redmi"             // 要连接的 WiFi 热点名称
+#define WLAN_PASSWORD "00000000"   // WiFi 密码
 #define NET_READY_TIME_OUT (rt_tick_from_millisecond(15 * 1000)) // 等待获取 IP 的超时时间
 #define TIME_API_URL "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"    //获取时间的URL
 
@@ -33,6 +34,8 @@ static int wifi_autoconnect(void);
 
 static struct rt_semaphore net_ready;   // 信号量: 用于网络准备就绪
 static struct rt_semaphore scan_done;   // 信号量: 用于WiFi扫描完成标志
+rt_sem_t dynamic_sem = RT_NULL;         // 信号量: 收到mqtt信息
+
 
 struct rt_wlan_info info; //wifi信息
 
@@ -80,6 +83,7 @@ void wlan_station_disconnect_handler(int event, struct rt_wlan_buff *buff, void 
 // 连接成功的回调函数（触发自动重连时使用）
 static void wlan_connect_handler(int event, struct rt_wlan_buff *buff, void *parameter)
 {
+
     rt_kprintf("%s\n", __FUNCTION__);
     if ((buff != RT_NULL) && (buff->len == sizeof(struct rt_wlan_info)))
     {
@@ -128,14 +132,16 @@ static void update_rtc_with_ntp_time(void)
 }
 
 
-
 static void Wifi_Init(void *parameter)
 {
     static int i = 0;
     int result = RT_EOK;
 
+//    wifi_autoconnect();
+
     // 等待WiFi初始化完成
     rt_thread_mdelay(500); // 延时500ms，等待 RW007 模块初始化完成
+
 
     // 步骤1: 扫描周围热点
     LOG_D("start to scan ap ...");
@@ -186,6 +192,8 @@ static void Wifi_Init(void *parameter)
         LOG_E("The AP(%s) is connect failed!", WLAN_SSID);
     }
 
+    dynamic_sem = rt_sem_create("dsem", 0, RT_IPC_FLAG_PRIO);
+
     update_rtc_with_ntp_time();
 
     return ;
@@ -222,6 +230,7 @@ static void print_wlan_information(struct rt_wlan_info *info,int index)
 
     rt_kprintf("%-14.14s %-4d %3d %4d\n", security, info->rssi, info->channel, info->datarate / 1000000);
 }
+MSH_CMD_EXPORT(print_wlan_information,print_wlan_information);
 
 // 配置并启动自动连接机制
 static int wifi_autoconnect(void)

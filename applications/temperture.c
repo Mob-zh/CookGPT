@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <aht10.h>
 #include <temperture.h>
+#include "mqtt.h"
 
 #define THREAD_PRIORITY         20      // 线程优先级
 #define THREAD_STACK_SIZE       1024     // 线程堆栈大小
@@ -18,7 +19,7 @@ static rt_thread_t tid_temp = RT_NULL;
 static void get_temp(void *parameter)
 {
 
-
+    char send_buff[100] = {'\0'};
     aht10_device_t dev;
     const char *i2c_bus_name = "i2c3";
     /* 等 待 传 感 器 正 常 工 作 */
@@ -36,6 +37,16 @@ static void get_temp(void *parameter)
     humidity = aht10_read_humidity(dev);
     /* 读 取 温 度 */
     temperature = aht10_read_temperature(dev);
+
+    sprintf(send_buff, "%.2f", temperature);
+    mq_temp_publish(send_buff);
+
+    sprintf(send_buff, "%.2f", humidity);
+    mq_wet_publish(send_buff);
+
+    sprintf(send_buff, "%d", 0);
+    mq_fire_publish(send_buff);
+
     rt_thread_mdelay(2000);
     }
         return ;

@@ -43,6 +43,7 @@
 #define MQTT_PUB_TEMP_TOPIC "/CookGPT/pub/temp"
 #define MQTT_PUB_WET_TOPIC "/CookGPT/pub/wet"
 #define MQTT_PUB_FIRE_TOPIC "/CookGPT/pub/fire"
+#define MQTT_PUB_SMOKE_TOPIC "/CookGPT/pub/smoke"
 
 /* define MQTT client context */
 static MQTTClient client;
@@ -51,6 +52,7 @@ char sub_led_topic[48] = {0};
 char pub_temp_topic[48] = {0};
 char pub_wet_topic[48] = {0};
 char pub_fire_topic[48] = {0};
+char pub_smoke_topic[48] = {0};
 
 /* Thread */
 #define THREAD_PRIORITY         25
@@ -169,6 +171,7 @@ void mq_start(void)
         rt_snprintf(pub_temp_topic, sizeof(pub_temp_topic), "%s", MQTT_PUB_TEMP_TOPIC);
         rt_snprintf(pub_wet_topic, sizeof(pub_temp_topic), "%s", MQTT_PUB_WET_TOPIC);
         rt_snprintf(pub_fire_topic, sizeof(pub_temp_topic), "%s", MQTT_PUB_FIRE_TOPIC);
+        rt_snprintf(pub_smoke_topic, sizeof(pub_smoke_topic), "%s", MQTT_PUB_SMOKE_TOPIC);
 
         /* 配置连接参数 */
         memcpy(&client.condata, &condata, sizeof(condata));
@@ -261,3 +264,17 @@ void mq_fire_publish(const char *send_str)
     return;
 }
 
+void mq_smoke_publish(const char *send_str)
+{
+    MQTTMessage message;
+    const char *msg_str = send_str;
+    const char *topic = pub_smoke_topic;
+    message.qos = QOS1;
+    message.retained = 0;
+    message.payload = (void *)msg_str;
+    message.payloadlen = strlen(message.payload);
+
+    MQTTPublish(&client, topic, &message);
+
+    return;
+}

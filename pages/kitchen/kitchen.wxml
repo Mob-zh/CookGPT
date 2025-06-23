@@ -1,0 +1,79 @@
+<view class="container">
+  <!-- 标题部分 -->
+  <view class="header">
+    <text class="title">CookGPT</text>
+    <text class="subtitle">厨房安全监控系统</text>
+  </view>
+  
+  <!-- 连接状态 -->
+  <view class="connection-status {{connectionStatus === '已连接' ? 'connected' : 'disconnected'}}">
+    <text>{{connectionStatus}}</text>
+    <button wx:if="{{connectionStatus !== '已连接'}}" size="mini" bindtap="reconnectMQTT">重新连接</button>
+  </view>
+  
+  <!-- 报警状态显示 -->
+  <view class="status-card {{alarmStatus}}">
+    <text class="status-text">当前状态: {{statusText}}</text>
+    <button wx:if="{{alarmStatus === 'danger'}}" class="emergency-btn" bindtap="handleEmergency">紧急处置</button>
+  </view>
+  
+  <!-- 传感器数据展示 -->
+  <view class="sensor-container">
+    <!-- 温度 -->
+    <view class="sensor-card {{tempWarning ? 'warning' : ''}}">
+      <text class="sensor-value">{{temperature}}°C</text>
+      <text class="sensor-label">温度</text>
+      <progress percent="{{Math.min(temperature, 100)}}" stroke-width="6" active-color="#FF6B6B"/>
+      <view class="threshold-control">
+        <text>阈值: </text>
+        <input type="number" data-field="temp" value="{{tempThreshold}}" bindinput="updateThreshold" />
+      </view>
+      <text class="sensor-warning" wx:if="{{tempWarning}}">⚠️ 温度过高!</text>
+    </view>
+    
+    <!-- 湿度 -->
+    <view class="sensor-card {{humiWarning ? 'warning' : ''}}">
+      <text class="sensor-value">{{humidity}}%</text>
+      <text class="sensor-label">湿度</text>
+      <progress percent="{{humidity}}" stroke-width="6" active-color="#4D8BF5"/>
+      <view class="threshold-control">
+        <text>阈值: </text>
+        <input type="number" data-field="humi" value="{{humiThreshold}}" bindinput="updateThreshold" />
+      </view>
+      <text class="sensor-warning" wx:if="{{humiWarning}}">⚠️ 湿度过高!</text>
+    </view>
+    
+    <!-- 新增烟雾检测模块 -->
+    <view class="sensor-card {{smokeWarning ? 'danger' : ''}}">
+      <image src="/images/smoke.png" class="sensor-icon" />
+      <text class="sensor-value">{{smokeLevel}}级</text>
+      <text class="sensor-label">烟雾浓度</text>
+      <progress percent="{{smokeLevel * 20}}" stroke-width="6" active-color="#FFA726"/>
+      <view class="threshold-control">
+        <text>阈值: </text>
+        <input type="number" data-field="smoke" value="{{smokeThreshold}}" bindinput="updateThreshold" min="1" max="5"/>
+      </view>
+      <text class="sensor-warning" wx:if="{{smokeWarning}}">🔥 检测到烟雾!</text>
+    </view>
+
+    <!-- 火焰检测 -->
+    <view class="sensor-card {{fireDetected ? 'danger' : ''}}">
+      <image src="{{fireDetected ? '/images/fire-on.png' : '/images/fire-off.png'}}" class="sensor-icon" />
+      <text class="sensor-value">{{fireDetected ? "有火焰！" : "无火"}}</text>
+      <text class="sensor-label">火焰检测</text>
+      <view class="flame-indicator {{fireDetected ? 'active' : ''}}"></view>
+      <text class="sensor-warning" wx:if="{{fireDetected}}">🔥 火灾警报!</text>
+    </view>
+  </view>
+
+  <!-- 数据更新时间 -->
+  <view class="update-time">
+    <image src="/images/clock.png" class="time-icon" />
+    <text>最后更新: {{updateTime}}</text>
+  </view>
+  
+  <!-- 系统信息 -->
+  <view class="footer">
+    <text>CookGPT厨房安全系统 v1.0</text>
+  </view>
+</view>

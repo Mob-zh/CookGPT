@@ -1,0 +1,166 @@
+/* 基础样式 */
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+/* 标题样式 */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #FF6B6B;
+}
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  display: block;
+  margin-top: 5px;
+}
+
+/* 连接状态 */
+.connection-status {
+  padding: 8px 15px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.connection-status.connected {
+  background-color: #e3f9e5;
+  color: #2e7d32;
+}
+.connection-status.disconnected {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+/* 状态卡片 */
+.status-card {
+  width: 90%;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.status-card.normal {
+  background-color: #E3F9E5;
+  border: 1px solid #C8E6C9;
+}
+.status-card.warning {
+  background-color: #FFF3E0;
+  border: 1px solid #FFE0B2;
+  animation: pulse 1.5s infinite;
+}
+.status-card.danger {
+  background-color: #FFEBEE;
+  border: 1px solid #FFCDD2;
+  animation: pulse 0.8s infinite;
+}
+.status-text {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* 传感器卡片 */
+.sensor-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.sensor-card {
+  width: 30%;
+  min-width: 110px;
+  padding: 15px 5px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  position: relative;
+}
+.sensor-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+.sensor-value {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.sensor-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+.sensor-warning {
+  font-size: 12px;
+  color: #FF5252;
+  margin-top: 5px;
+  font-weight: bold;
+  background-color: #ffebee;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+/* 阈值控制 */
+.threshold-control {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}
+.threshold-control input {
+  width: 40px;
+  height: 24px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0 5px;
+  margin-left: 5px;
+  text-align: center;
+}
+
+/* 更新时间 */
+.update-time {
+  font-size: 12px;
+  color: #999;
+  padding: 8px 15px;
+  background-color: white;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+/* 页脚 */
+.footer {
+  margin-top: auto;
+  padding: 10px;
+  font-size: 12px;
+  color: #999;
+}

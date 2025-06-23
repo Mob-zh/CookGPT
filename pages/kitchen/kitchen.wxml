@@ -45,7 +45,6 @@
     
     <!-- 新增烟雾检测模块 -->
     <view class="sensor-card {{smokeWarning ? 'danger' : ''}}">
-      <image src="/images/smoke.png" class="sensor-icon" />
       <text class="sensor-value">{{smokeLevel}}级</text>
       <text class="sensor-label">烟雾浓度</text>
       <progress percent="{{smokeLevel * 20}}" stroke-width="6" active-color="#FFA726"/>
@@ -68,7 +67,6 @@
 
   <!-- 数据更新时间 -->
   <view class="update-time">
-    <image src="/images/clock.png" class="time-icon" />
     <text>最后更新: {{updateTime}}</text>
   </view>
   

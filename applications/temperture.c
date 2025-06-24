@@ -44,8 +44,13 @@ static void get_temp(void *parameter)
     sprintf(send_buff, "%.2f", humidity);
     mq_wet_publish(send_buff);
 
+	//火焰传感器api（目前是只传0和1代表有没有火）
     sprintf(send_buff, "%d", 0);
     mq_fire_publish(send_buff);
+	
+	//烟雾api 传0-100的数
+    sprintf(send_buff, "%d", 1);
+    mq_smoke_publish(send_buff);
 
     rt_thread_mdelay(2000);
     }

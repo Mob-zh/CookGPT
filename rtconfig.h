@@ -94,6 +94,7 @@
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
+#define RT_USING_ADC
 #define RT_USING_PWM
 #define RT_USING_RTC
 #define RT_USING_SPI
@@ -484,6 +485,7 @@
 #define BSP_USING_ON_CHIP_FLASH
 #define BSP_USING_SPI
 #define BSP_USING_SPI2
+#define BSP_USING_ADC
 #define BSP_USING_I2C
 #define BSP_USING_I2C1
 #define BSP_I2C1_SCL_PIN 64

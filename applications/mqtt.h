@@ -8,6 +8,7 @@ void mq_start(void);
 void mq_temp_publish(const char *send_str);
 void mq_wet_publish(const char *send_str);
 void mq_fire_publish(const char *send_str);
+void mq_smoke_publish(const char *send_str);
 
 
 #endif
